@@ -1,4 +1,6 @@
 <?php
+set_time_limit(0);
+ini_set('memory_limit', '4000M');
 ini_set('display_errors',1);
 ini_set('display_startup_erros',1);
 error_reporting(E_ALL);
@@ -19,72 +21,71 @@ $colunas = array();
 $json = array();
 $ponteiro = 1;
 
-if(is_file($$inpCSV))
 
-    $arquivo = file($inpCSV);
+$arquivo = file($inpCSV);
 
-    if(!empty($arquivo)){
+if(!empty($arquivo)){
 
-        foreach($arquivo as $linha){
+    foreach($arquivo as $linha){
 
-            if($ponteiro === 1){
+        if($ponteiro === 1){
 
-                $quebra = explode($delimitador, $linha);
+            $quebra = explode($delimitador, $linha);
 
-                if(!empty($quebra)){
+            if(!empty($quebra)){
 
-                    foreach($quebra as $coluna){
+                foreach($quebra as $coluna){
 
-                        $colunas[] = utf8_encode(trim($coluna));
-                    }
-
-                }else{
-                    echo 'Nenhuma coluna foi encontrada para fazer a conversão.';
-                    exit;
+                    $colunas[] = utf8_encode(trim($coluna));
                 }
+
             }else{
+                echo 'Nenhuma coluna foi encontrada para fazer a conversão.';
+                exit;
+            }
+        }else{
 
-                $quebra = explode($delimitador, $linha);
+            $quebra = explode($delimitador, $linha);
 
-                if(!empty($quebra)){
+            if(!empty($quebra)){
 
-                    $indice = 0;
-                    $arrayRegistro = array();
+                $indice = 0;
+                $arrayRegistro = array();
 
-                    foreach($quebra as $registro){
+                foreach($quebra as $registro){
 
-                        if(isset($colunas[$indice])){
+                    if(isset($colunas[$indice])){
 
-                            $arrayRegistro[$colunas[$indice]] = utf8_encode(trim($registro));
-                        }else{
-                            $arrayRegistro[] = "";
-                        }
-
-                        $indice++;
+                        $arrayRegistro[$colunas[$indice]] = utf8_encode(trim($registro));
+                    }else{
+                        $arrayRegistro[] = "";
                     }
 
-                    $json[] = $arrayRegistro;
-
-                }else{
-                    echo 'Nenhum registro encontrado no CSV informado.';
+                    $indice++;
                 }
+
+                $json[] = $arrayRegistro;
+
+            }else{
+                echo 'Nenhum registro encontrado no CSV informado.';
             }
-
-
-            $ponteiro++;
-
         }
 
-        $saida = json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 
-        $fp = fopen($outJSON, 'w+');
-        $fw = fwrite($fp, $saida);
-        fclose($fp);
+        $ponteiro++;
 
-    }else{
-        echo 'Nenhum conteúdo encontrado para fazer a conversão';
     }
+
+    $saida = json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+
+    $fp = fopen($outJSON, 'w+');
+    $fw = fwrite($fp, $saida);
+    fclose($fp);
+
+    echo 'Conversão finalizada';
+
 }else{
-    echo 'O arquivo CSV informado não existe. Informe um arquivo válido';
+    echo 'Nenhum conteúdo encontrado para fazer a conversão';
 }
+
 ?>
