@@ -9,7 +9,9 @@ Depois de feito o download, abra o arquivo gerajson.php com seu editor de texto 
 Configure as  primeiras variáveis: $inpCSV, $outJSON e $delimitador
 
 $inpCSV: O caminho aonde se encontra o CSV
+
 $outCSV: Caminho aonde será salvo o jSON gerado. Lembre-se de manter a extensão .json
+
 $delimitador: Separador de colunas CSV. Por padrão o CSV usa ";" (ponto e vírgula)
 
 Após feito esses passos, abra seu terminal e digite:
